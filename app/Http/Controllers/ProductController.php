@@ -50,9 +50,9 @@ class ProductController extends Controller
         $product = $request->user()->products()->create($validated);
 
         // consume time => queue 
-        Mail::to(auth()->user())->send(new ProductCreated($product));
+        Mail::to(auth()->user())->queue(new ProductCreated($product));
 
-        Mail::to(auth()->user())->send(new ProductCreatedByAdmin($product));
+        Mail::to(auth()->user())->queue(new ProductCreatedByAdmin($product));
  
         return redirect(route('products.index'))->with('success', 'Product created successfully.');
     }
