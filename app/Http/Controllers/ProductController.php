@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Mail\ProductCreated;
+use App\Mail\ProductCreatedByAdmin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ProductController extends Controller
 {
@@ -44,7 +47,12 @@ class ProductController extends Controller
             'description' => 'required|string|max:255',
         ]);
  
-        $request->user()->products()->create($validated);
+        $product = $request->user()->products()->create($validated);
+
+        // consume time => queue 
+        Mail::to(auth()->user())->send(new ProductCreated($product));
+
+        Mail::to(auth()->user())->send(new ProductCreatedByAdmin($product));
  
         return redirect(route('products.index'))->with('success', 'Product created successfully.');
     }
