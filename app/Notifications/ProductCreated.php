@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\VonageMessage;
 
-class ProductCreated extends Notification
+class ProductCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
