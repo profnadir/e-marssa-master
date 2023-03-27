@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\ProductCommande;
+use App\Listeners\NotifyAdmin;
+use App\Listeners\PrepareCommandForClient;
+use App\Listeners\UpdateStock;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        ProductCommande::class =>[
+            NotifyAdmin::class,
+            PrepareCommandForClient::class,
+            UpdateStock::class
+        ]
     ];
 
     /**
