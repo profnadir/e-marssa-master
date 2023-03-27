@@ -6,7 +6,7 @@ use App\Events\ProductCommande;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifyAdmin
+class NotifyAdmin 
 {
     /**
      * Create the event listener.
