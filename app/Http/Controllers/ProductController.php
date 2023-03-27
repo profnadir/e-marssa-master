@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProductCreated;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -44,7 +45,11 @@ class ProductController extends Controller
             'description' => 'required|string|max:255',
         ]);
  
-        $request->user()->products()->create($validated);
+        $product = $request->user()->products()->create($validated);
+
+        ProductCreated::dispatch($product);
+
+
  
         return redirect(route('products.index'))->with('success', 'Product created successfully.');
     }
