@@ -45,14 +45,25 @@
                                 </x-dropdown>
                             @endif
                         </div>
-                        <p class="mt-4 mb-4 text-lg text-gray-900 ">{{ $product->description }}</p>
-                        <h4 class="text-sm">
-                            {{ __('Price') }}: {{ $product->price }} {{ __('USD') }}
-                        
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                {{ $product->quantity }} {{ __('kg in stock') }}
-                            </span>
-                        </h4>
+                        <div class="flex items-center">
+                            <div class="mr-5">
+                                @if ($product->file_path)
+                                    <img src="{{asset('/storage/'.$product->file_path)}}" alt="{{ $product->name}}" class="rounded-full h-14 w-14 object-cover object-center group-hover:opacity-75">
+                                @else
+                                    <img src="https://cdn-icons-png.flaticon.com/512/830/830484.png" alt="" class="rounded-full h-14 w-14 object-cover object-center group-hover:opacity-75">
+                                @endif
+                            </div>
+                            <div>
+                                <p class="mt-4 mb-4 text-lg text-gray-900 ">{{ $product->description }}</p>
+                                <h4 class="text-sm">
+                                    {{ __('Price') }}: {{ $product->price }} {{ __('USD') }}
+                                
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        {{ $product->quantity }} {{ __('kg in stock') }}
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endforeach

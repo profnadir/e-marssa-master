@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProductCreated;
 use App\Models\Product;
+use App\Jobs\ProductCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -43,9 +44,19 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'description' => 'required|string|max:255',
+            'file' => 'mimes:png,jpg,jpeg|max:2048'
         ]);
  
         $product = $request->user()->products()->create($validated);
+
+        if($request->file()) {
+            $fileName = time().'_'.$request->file->getClientOriginalName();
+
+            $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
+
+            $product->file_path = $filePath;
+            $product->save();
+        }
 
         ProductCreated::dispatch($product);
 
@@ -96,9 +107,31 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'description' => 'required|string|max:255',
+            'file' => 'mimes:png,jpg,jpeg|max:2048'
         ]);
  
         $product->update($validated);
+
+        if($request->file()) {
+            if($product->file_path) {
+                //dd($product->file_path);
+                //Storage::disk('public')->exists('uploads/1679872887_pexels-fox-213399.jpg') ? dd('ok') : dd('ko');
+
+                if(Storage::disk('public')->delete($product->file_path)){
+                    $fileName = time().'_'.$request->file->getClientOriginalName();
+
+                    $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
+
+                    $product->file_path = $filePath;
+                    $product->save();
+                }
+            }else{
+                $fileName = time().'_'.$request->file->getClientOriginalName();
+                $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
+                $product->file_path = $filePath;
+                $product->save();
+            }
+        }
  
         return redirect(route('products.index'))->with('success', 'Product updated successfully.');
     }
@@ -113,8 +146,10 @@ class ProductController extends Controller
     {
         $this->authorize('delete', $product);
  
+        Storage::disk('public')->delete($product->file_path);
+
         $product->delete();
- 
+
         return redirect(route('products.index'))->with('success', 'Product deleted successfully.');;
     }
 }

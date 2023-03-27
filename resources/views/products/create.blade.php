@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <form method="POST" action="{{ route('products.store') }}">
+        <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
                 <label for="name" class="block text-gray-700 font-bold mb-2">{{ __('Name') }}</label>
@@ -25,6 +25,11 @@
                 class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 >{{ old('description') }}</textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
+            </div>
+            <div class="mb-4">
+                <label for="file" class="block text-gray-700 font-bold mb-2">{{ __('Select image') }}</label>
+                <input type="file" name="file" id="file" value="{{ old('file') }}" class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                <x-input-error :messages="$errors->get('file')" class="mt-2" />
             </div>
             
             <x-primary-button class="mt-4">{{ __('Add') }}</x-primary-button>

@@ -43,7 +43,11 @@
                         @foreach ($products as $product)
                             <a href="#" class="group">
                                 <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
-                                    <img src="https://images.pexels.com/photos/61153/fish-fischer-ocean-market-61153.jpeg" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="h-full w-full object-cover object-center group-hover:opacity-75">
+                                    @if ($product->file_path)
+                                        <img src="{{asset('/storage/' .$product->file_path)}}" alt="{{ $product->name}}" class="h-48 w-full object-cover object-center group-hover:opacity-75">
+                                    @else
+                                        <img src="https://cdn-icons-png.flaticon.com/512/830/830484.png" alt="" class="h-48 w-full object-cover object-center group-hover:opacity-75">
+                                    @endif
                                 </div>
                                 <h3 class="mt-4 text-sm text-gray-700">{{$product->name}} by <sub>{{$product->user->name}}</sub> </h3>
                                 <p class="mt-1 text-lg font-medium text-gray-900">${{$product->price}}</p>
