@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Notifications\ProductCreated;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -44,7 +45,10 @@ class ProductController extends Controller
             'description' => 'required|string|max:255',
         ]);
  
-        $request->user()->products()->create($validated);
+        $product = $request->user()->products()->create($validated);
+
+        // add queue
+        $request->user()->notify(new ProductCreated($product));
  
         return redirect(route('products.index'))->with('success', 'Product created successfully.');
     }
